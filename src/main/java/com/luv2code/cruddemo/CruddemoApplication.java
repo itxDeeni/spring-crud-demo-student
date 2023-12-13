@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
+
 @SpringBootApplication
 public class CruddemoApplication {
 
@@ -19,16 +21,61 @@ public class CruddemoApplication {
 		return runner -> {
 			createStudent(studentDAO);
 
-			readStudent(studentDAO);
+//			readStudent(studentDAO);
+//			queryForStudent(studentDAO);
+//			queryForStudentsByLastName(studentDAO);
+//			updateStudent(studentDAO);
+//			deleteStudent(studentDAO);
+//			deleteAllStudents(studentDAO);
 		};
+	}
+
+	private void deleteAllStudents(StudentDAO studentDAO) {
+		System.out.println("Deleting all Students");
+		int numRows = studentDAO.deleteAll();
+		System.out.println(numRows);
+	}
+
+	private void deleteStudent(StudentDAO studentDAO) {
+		int studentId = 3;
+		studentDAO.delete(studentId);
+		System.out.println("Deleting student: " + studentId);
+	}
+
+	private void updateStudent(StudentDAO studentDAO) {
+//		int studentID = 1;
+		Student myStudent = studentDAO.findById(1);
+		myStudent.setFirstName("Scooby");
+		studentDAO.update(myStudent);
+		System.out.println(myStudent);
+	}
+
+	private void queryForStudentsByLastName(StudentDAO studentDAO) {
+		List<Student> theStudent = studentDAO.findByLastName("Muaz");
+
+		for (Student tempStudent: theStudent){
+			System.out.println(theStudent);
+		}
+	}
+
+	private void queryForStudent(StudentDAO studentDAO) {
+		//get a list of students
+		List<Student> theStudents = studentDAO.findAll();
+
+		//display the students
+		for(Student student : theStudents) {
+			System.out.println(student);
+		}
+
+
 	}
 
 	private void readStudent(StudentDAO studentDAO) {
 		Student tempStudent = new Student("Zara","Muaz","test@luv2code.com");
 		studentDAO.save(tempStudent);
 		int studentId = tempStudent.getId();
-		studentDAO.findById(studentId);
-		System.out.println(tempStudent);
+		Student myStudent = studentDAO.findById(studentId);
+		System.out.println(myStudent);
 	}
 
 	private void createStudent(StudentDAO studentDAO) {
